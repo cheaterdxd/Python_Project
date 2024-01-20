@@ -1,7 +1,3 @@
-'''
-site: thanh-tuan-le.atlassian.net 
-access_token = ATATT3xFfGF0aCFPLsNIFL9V0Xg7LJJwHra3ojTLOFzi5vKQCXxHzBKo4pFFNlhjZIGEf27ojiBP5Ib35-z8Znygew25wIlTYJHgJEmLy60gHalpFQ6YbFLe-O7GRDPC-7lgqhadvgX_Du4mGFgvLzTHFL-JSR1ck7BaXobp4itQ5dze6jmC6PA=F4E12B65
-'''
 from atlassian import Jira
 
 
