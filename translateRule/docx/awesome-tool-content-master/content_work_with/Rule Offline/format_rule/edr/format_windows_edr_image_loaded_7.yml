@@ -1,0 +1,64 @@
+rule_name: Windows EDR Image Loaded Format
+id: 0
+description: Windows EDR Image Loaded Format
+author: format_rule
+tags:
+  - VCS_Content_Offline
+  - Sprint
+date: 2023/12/02
+modified: 2023/12/02
+product: VCS_Ajiant
+status: development
+mitre-attack:
+  technique:
+  datasource:
+    - module.module_load
+  tactic:
+reference:
+filter:
+  event:
+    logsource:
+      source_log: win_event_log
+      log_provider_name: AdvanceCollector
+      signature_id: 7
+    query:
+      - AND:
+        - tags|contains: "false"
+indicator:
+  not_alert:
+    query:
+      - client_id|==|raw: $event.getClient_id()
+    time_window: 1h
+  accumulate:
+    query:
+      - client_id|==|raw: $event.getClient_id()
+    time_window: 1h
+    count|>=: 1 
+  action:
+    alert:
+      alert_fields:
+        object|raw: $event.getClient_id()
+      event_fields:
+        - organization_group
+        - client_id
+        - log_provider_name
+        - log_channel_name
+        - signature_id
+        - hostname
+        - source_log
+        - source_process_path
+        - file_path
+        - file_company
+        - file_description
+        - file_hash_md5
+        - file_hash_sha256
+        - file_signature
+        - file_signature_expried
+        - file_version
+        - process_file_company
+        - process_file_internalname
+        - process_file_originalname
+        - process_file_product
+        - process_file_signed
+severity: medium
+version: 1

@@ -1,0 +1,92 @@
+rule "Indicator_Windows_APT_Gpresult_Display_Group_Policy_Information_Ver1"
+    salience 1
+    when
+    (
+        (
+            $event : Event(
+                filtered_ids contains "Filter_Windows_APT_Gpresult_Display_Group_Policy_Information_Ver1",
+                $hostname : hostname,
+                $signature_id : signature_id,
+                $create_time : create_time,
+                $log_channel_name : log_channel_name, 
+                $log_provider_name : log_provider_name, 
+                $organization_group : organization_group, 
+                $client_id : client_id, 
+                $target_process_path : target_process_path, 
+                $target_process_id : target_process_id, 
+                $source_process_path : source_process_path,
+                $source_process_id : source_process_id,
+                $suser : suser, $duser : duser, 
+                $target_domain_name : target_domain_name, 
+                $source_domain_name : source_domain_name, 
+                $target_commandline : target_commandline, 
+                $file_product : file_product, 
+                $file_company : file_company, 
+                $source_commandline : source_commandline, 
+                $file_hash_md5 : file_hash_md5, 
+                $file_hash_sha256 : file_hash_sha256, 
+                $reg_target_object : reg_target_object, 
+                $reg_value_data : reg_value_data, 
+                $reg_event_type : reg_event_type, 
+                $file_path : file_path, 
+                $file_status : file_status, 
+                $event_log_id : event_log_id,
+                $script_content : script_content
+                )
+        )
+        and
+        (
+            AlertEvent(client_id == $client_id, rule_id == "Windows_APT_Gpresult_Display_Group_Policy_Information_Ver1")
+        )
+        // and
+        // (
+        //     // accumulate ($allEvent : IndicatorEvent(filtered_ids contains "Filter_Windows_APT_Gpresult_Display_Group_Policy_Information_Ver1", client_id == $client_id, $event_id : event_log_id) over window:time(1h); $count : count($allEvent), $events_id : collectSet($event_id);  $count >= 1)
+        // )
+    )
+
+    then
+        AlertEvent alert = new AlertEvent();
+        // alert.setTimestamp(System.currentTimeMillis()/1000);
+        alert.setHostname($hostname);
+        alert.setClient_id($client_id);
+        alert.setSeverity(8);
+        alert.setAttack_tactic("Discovery");
+        alert.setOrganization_group($organization_group);
+        alert.setSignature_id($signature_id);
+        alert.setCreate_time($create_time);
+        alert.setLog_channel_name($log_channel_name);
+        alert.setLog_provider_name($log_provider_name);
+        alert.setSource_process_id($source_process_id);
+        alert.setSource_process_path($source_process_path);
+        alert.setTarget_process_path($target_process_path);
+        alert.setTarget_process_id($target_process_id);
+        alert.setSuser($suser);
+        alert.setDuser($duser);
+        alert.setTarget_domain_name($target_domain_name);
+        alert.setSource_domain_name($source_domain_name);
+        alert.setTarget_commandline($target_commandline);
+        alert.setSource_commandline($source_commandline);
+        alert.setFile_hash_md5($file_hash_md5);
+        alert.setFile_hash_sha256($file_hash_sha256);
+        alert.setLink("https://attack.mitre.org/techniques/T1615");
+        alert.setDescription_en("Detects cases in which a user uses the built-in Windows utility gpresult to display the Resultant Set of Policy (RSoP) information");
+        alert.setDescription("Phát hiện các trường hợp người dùng sử dụng tiện ích Windows tích hợp sẵn gpresult để hiển thị thông tin Resultant Set of Policy (RSoP)");
+        alert.setSource_log("mixed");
+        alert.setCategory("Windows");
+        alert.setSub_category("APT");
+        alert.setReg_target_object($reg_target_object);
+        alert.setReg_value_data($reg_value_data);
+        alert.setReg_event_type($reg_event_type);
+        alert.setFile_path($file_path);
+        alert.setFile_status($file_status);
+        // alert.addEventId($event_log_id);
+        // alert.setFile_product($file_product);
+        // alert.setFile_company($file_company);
+        // alert.setReference("https://github.com/SigmaHQ/sigma/blob/master/rules/windows/process_creation/proc_creation_win_gpresult_execution.yml");
+        // alert.setRelease_level(1);
+        // alert.setScript_content($script_content);
+        // alert.setRule_id("Windows_APT_Gpresult_Display_Group_Policy_Information_Ver1");
+        // insert(alert);
+        // Functions.processAlertOutput(alert);
+
+    end

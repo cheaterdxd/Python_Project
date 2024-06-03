@@ -1,0 +1,37 @@
+name: Supicious DLL Loaded
+id: 0
+description: Possible legimate process loading unsigned DLL which does not correlate known hash DLL.
+category:
+  - APT & Zero days
+technique:
+  - T1574.002
+rules:
+  rule_0:
+    name: New Hash DLL Loaded
+    behavior: vcs_ajiant_image_loaded
+    filters: 
+      compare_0: File Extension|in: dll,DLL
+      compare_1: File Signed|equal: false
+      profile_0: New|Process Name,Host|Hash: true
+      express_0: replace_regex(file_path, "[^\\\\]+$") == replace_regex(source_process_path, "[^\\\\]+$")
+    conditions:
+      condition_0: compare_0|compare_1|profile_0|express_0
+    # aggregate:
+    #   time: 60m
+    #   objects: *
+    #   functions:
+    #     - count|*|>=: 1
+# chain:
+#   chain_type: all
+#   join_condition: file_path
+#   chain_time: 60m
+#   expire_time: 60m
+risk_score:
+  level: medium
+  entity: Host
+  escalate: false
+# tagging:
+#   asset_list: asset_file
+#   field: field
+suppression: Host|File Path
+message: Indicator of ${file} sideloaded by ${process} on ${host}

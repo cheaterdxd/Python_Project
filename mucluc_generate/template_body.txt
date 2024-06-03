@@ -1,0 +1,38 @@
+<body onload="init();">
+    <ul>
+        body_space_holder
+    </ul>
+    <script>
+        var old = 0;
+        var url = "https://www.trungtamchidung.edu.vn/bai-viet/872f530b-d871-431e-b829-3645d88c0199/";
+        // var url = "https://nguyenminhnhattanc.editorx.io/trungtamchidung/bai-viet/7dcab94b-c700-426b-a635-030457c40ff5";
+        function init() {
+            window.onmessage = (event) => {
+                console.log("HTML recv", event.data);
+                window.parent.postMessage("connect OK", url);
+            }
+        }
+
+
+        function changebackground(element) {
+            if (element.tagName == "P") {
+                if (old != element) {
+                    if (old != 0) {
+                        old.style.backgroundColor = "";
+                    }
+                    element.style.backgroundColor = "#fad487";
+                    old = element;
+                    id = element.getAttribute("id");
+                    window.parent.postMessage(id, url); // lấy giá trị của thuộc tính id;
+                }
+                else {
+                    window.parent.postMessage("scroll up", url);
+                }
+            }
+        }
+        document.addEventListener('click', function (evt) {
+            changebackground(evt.target);
+        }, false);
+
+    </script>
+</body>

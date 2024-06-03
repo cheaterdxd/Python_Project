@@ -1,0 +1,67 @@
+rule_name: Suspicious AWS Execution via System Manager
+id: 0
+description: Identifies the execution of commands and scripts via System Manager. Execution methods such as RunShellScript, RunPowerShellScript, and alike can be abused by an authenticated attacker to install a backdoor or to interact with a compromised instance via reverse-shell using system only commands.
+author: vuha10
+tags:
+  - VCS_Content_Offline
+  - Sprint_28
+date: 2023/11/07
+modified: 2023/11/07
+product: VCS_Cym
+status: experimental
+mitre-attack:
+  technique:
+    - T1651
+  datasource:
+    - cloud storage.cloud storage enumeration
+  tactic:
+    - Credential Access
+filter:
+  event:
+    logsource:
+      log_parser: aws_cloudtrail
+    query:
+      - AND:
+        - event_source|==: "ssm.amazonaws.comn"
+        - event_name|==: "SendCommand"
+indicator:
+  not_alert:
+    query:
+      - account_id|==|raw: $event.getAccount_id()
+    time_window: 1h
+  accumulate:
+    query:
+      - account_id|==|raw: $event.getAccount_id()
+    time_window: 1h
+    count|>=: 1 
+  action:
+    alert:
+      alert_fields:
+        object|raw: $event.getAccount_id()
+      event_fields:
+        - access_key_id
+        - account_id
+        - attributes
+        - customer_group
+        - device_product
+        - device_vendor
+        - customer_group
+        - event_name
+        - event_source
+        - event_type
+        - event_category
+        - event_from_console
+        - event_version
+        - log_group
+        - management_event
+        - read_only
+        - recipient_account_id
+        - region
+        - session_issuer
+        - tls_details
+        - type
+        - user_agent_original
+        - organization_group
+        - add_event_data
+severity: medium
+version: 1

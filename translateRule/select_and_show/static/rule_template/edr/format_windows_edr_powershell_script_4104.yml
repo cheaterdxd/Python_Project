@@ -1,0 +1,56 @@
+rule_name: Windows EDR Powershell Script Format
+id: 0
+description: Windows EDR Powershell Script Format
+author: format_rule
+tags:
+  - VCS_Content_Offline
+  - Sprint 
+date: 2023/11/06
+modified: 2023/11/06
+product: VCS_Ajiant
+status: development
+mitre-attack:
+  technique:
+  datasource:
+    - command.command_execution
+    - script.script_execution
+  tactic:
+reference:
+filter:
+  event:
+    logsource:
+      source_log: win_event_log
+      log_provider_name: AdvanceCollector
+      signature_id: 4104
+    query:
+      - AND:
+        - tags|contains: "false"
+indicator:
+  not_alert:
+    query:
+      - client_id|==|raw: $event.getClient_id()
+    time_window: 1h
+  accumulate:
+    query:
+      - client_id|==|raw: $event.getClient_id()
+    time_window: 1h
+    count|>=: 1 
+  action:
+    alert:
+      alert_fields:
+        object|raw: $event.getClient_id()
+      event_fields:
+        - organization_group
+        - client_id
+        - log_provider_name
+        - log_channel_name
+        - signature_id
+        - hostname
+        - source_log
+        - script_content
+        - script_path
+        - source_commandline
+        - target_commandline
+        - target_process_path
+severity: medium
+version: 1

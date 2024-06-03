@@ -1,0 +1,34 @@
+name: Image Loaded
+id: 0
+product: VCS-aJiant
+description: Image loaded in a specific process (VCS Content TI Standard)
+tags:
+  - Endpoint
+  - VCS Content TI Standard
+source: edr
+filters:
+  filter_0: device_product|equal: VCS-aJiant
+  filter_1: source_log|equal: win_event_log
+  filter_2: log_provider_name|equal: AdvanceCollector
+  filter_3: signature_id|==: 7
+conditions: 
+  condition_0: filter_0|filter_1|filter_2|filter_3
+mapping:
+  # A:B mean A field map to term B
+  local_timestamp: Timestamp
+  client_id: Host
+  event_id: EventID
+  file_path: File Path
+  file_signed: File Signed
+  file_signature: File Signature
+  file_signature_expried: File Signature Expried
+  hostname: Hostname
+  organization_group: Organization Group
+  source_process_id: Source Process ID
+  target_process_id: Target Process ID
+  source_process_path: Process
+  file_hash_md5: Hash
+profiling:
+  # Profile|Entity|Attribute
+  profile_0: Age|Host|
+  profile_1: New|Process Name,Host|Hash

@@ -1,0 +1,56 @@
+rule_name: Windows Sysmon Image Loaded Format
+id: 0
+description: Windows Sysmon Image Loaded Format
+author: format_rule
+tags:
+  - VCS_Content_Offline
+  - Sprint 
+date: 2023/11/06
+modified: 2023/11/06
+product: VCS_CyM
+status: development
+mitre-attack:
+  technique:
+  datasource:
+    - image.image_loaded
+  tactic:
+reference:
+filter:
+  event:
+    logsource:
+      log_parser: windows_event
+      log_name: Microsoft-Windows-Sysmon/Operational
+      signature_id: 7
+    query:
+      - AND:
+        - tags|==: false
+indicator:
+  not_alert:
+    query:
+      - client_id|==|raw: $event.getClient_id()
+    time_window: 1h
+  accumulate:
+    query:
+      - client_id|==|raw: $event.getClient_id()
+    time_window: 1h
+    count|>=: 1 
+  action:
+    alert:
+      alert_fields:
+        object|raw: $event.getClient_id()
+      event_fields:
+        - customer_group
+        - log_parser
+        - client_id
+        - organization_group
+        - source_name
+        - log_name
+        - signature_id
+        - suser
+        - hostname
+        - user_name
+        - source_process_path
+        - file_path
+        - file_signed
+severity: medium
+version: 1

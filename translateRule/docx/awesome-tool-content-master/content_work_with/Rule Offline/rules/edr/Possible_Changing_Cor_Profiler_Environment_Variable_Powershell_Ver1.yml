@@ -1,0 +1,60 @@
+rule_name: Potential DCOM InternetExplorer Application DLL Hijack
+id: 6554a451de768cf24d51d1dd
+description: Detects potential DLL hijack of iertutil.dll found in the DCOM InternetExplorer.Application Class over the network
+author: oanhptk6
+severity: critical
+version: 2
+tags:
+  - VCS_Content_Offline
+  - Sprint 29
+date: 2023/11/15
+modified: 2023/11/15
+product: VCS_Ajiant
+status: test
+mitre-attack:
+  technique:
+    - T1021.002
+    - T1021.003
+  datasource:
+    - image.image_loaded
+  tactic:
+    - Lateral Movement
+reference:  
+  - https://github.com/SigmaHQ/sigma/tree/master/rules/windows/image_load/image_load_iexplore_dcom_iertutil_dll_hijack.yml
+filter:
+  event:
+    logsource:
+      source_log: win_event_log
+      log_provider_name: AdvanceCollector
+      signature_id: 11
+    query:
+      - AND:
+        - source_process_path|!=: null
+        - source_process_path.toLowerCase()|contains: system
+        - file_path|!=: null
+        - file_path.toLowerCase()|contains: \\internet explorer\\iertutil.dll
+indicator:
+  not_alert:
+    query:
+      - client_id|==|raw: $event.getClient_id()
+    time_window: 1h
+  accumulate:
+    query:
+      - client_id|==|raw: $event.getClient_id()
+    time_window: 1h
+    count|>=: 1 
+  action:
+    alert:
+      alert_fields:
+        object|raw: $event.getClient_id()
+      event_fields:
+        - organization_group
+        - client_id
+        - log_provider_name
+        - log_channel_name
+        - signature_id
+        - hostname
+        - source_log
+        - source_process_path
+        - file_path
+        - file_status

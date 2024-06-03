@@ -1,0 +1,3 @@
+#!/bin/bash
+# EPIC TOOL
+python3 "$HOME/awesome-tool-content/Packet Tools/http_craft.py" $*

@@ -1,0 +1,143 @@
+<head>
+    <meta charset="UTF-8">
+    <!--<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Serif+Pro"> <!--Times+New+Roman Times New Roman-->
+    <style>
+        body {
+            font-size: 16px;
+            font-family: "K2D";
+
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0px;
+            margin-left: -3px;
+            margin-bottom: 0px;
+
+        }
+
+        li.h1 {
+            padding-left: 0px;
+            margin-bottom: 5px;
+        }
+
+        li.h2 {
+            padding-left: 14px;
+            margin-top: -15px;
+        }
+
+        li.h3 {
+            padding-left: 18px;
+            margin-top: -15px;
+        }
+
+        li.h4 {
+            padding-left: 22px;
+            margin-top: -15px;
+        }
+
+        p:hover {
+            background-color: #ffefd1;
+        }
+    </style>
+</head>
+
+<body onload="init();">
+    <ul>
+        <li class="h1">
+            <div>
+                <p id="1" style="font-weight: bold;">1.ĐẶT VẤN ĐỀ</p>
+            </div>
+        </li>
+        <li class="h1">
+            <div>
+                <p id="1" style="font-weight: bold;">2.NỘI DUNG NGHIÊN CỨU</p>
+            </div>
+            <ul>
+                <li class="h2">
+                    <div>
+                        <p id="1">2.1.Giới Thiệu Sơ Lược Về Kant</p>
+                    </div>
+                </li>
+                <li class="h2">
+                    <div>
+                        <p id="1">2.2.Sự Nghiệp Triết Học</p>
+                    </div>
+                </li>
+                <li class="h2">
+                    <div>
+                        <p id="1">2.3.Tiền Phê Phán (trước 1770)</p>
+                    </div>
+                </li>
+                <li class="h2">
+                    <div>
+                        <p id="1">2.4.Bốn Nghi Vấn Của Kant</p>
+                    </div>
+                </li>
+                <li class="h2">
+                    <div>
+                        <p id="2">2.5.Sự Ra Đời Của Triết Học Phê Phán</p>
+                    </div>
+                </li>
+                <li class="h2">
+                    <div>
+                        <p id="2">2.6.Tác Động Của Triết Học Phê Phán</p>
+                    </div>
+                </li>
+                <li class="h2">
+                    <div>
+                        <p id="2">2.7.Ứng Dụng Triết Phê Phán Trên Một Số Lĩnh Vực</p>
+                    </div>
+                </li>
+            </ul>
+        </li>
+        <li class="h1">
+            <div>
+                <p id="2" style="font-weight: bold;">3.KẾT LUẬN</p>
+            </div>
+        </li>
+        <li class="h1">
+            <div>
+                <p id="2" style="font-weight: bold;">TÀI LIỆU THAM KHẢO</p>
+            </div>
+        </li>
+        <li class="h1">
+            <div>
+                <p id="2" style="font-weight: bold;">DANH MỤC HÌNH</p>
+            </div>
+        </li>
+    </ul>
+    <script>
+        var old = 0;
+        var url = "https://www.trungtamchidung.edu.vn/bai-viet/872f530b-d871-431e-b829-3645d88c0199/";
+        // var url = "https://nguyenminhnhattanc.editorx.io/trungtamchidung/bai-viet/7dcab94b-c700-426b-a635-030457c40ff5";
+        function init() {
+            window.onmessage = (event) => {
+                console.log("HTML recv", event.data);
+                window.parent.postMessage("connect OK", url);
+            }
+        }
+
+
+        function changebackground(element) {
+            if (element.tagName == "P") {
+                if (old != element) {
+                    if (old != 0) {
+                        old.style.backgroundColor = "";
+                    }
+                    element.style.backgroundColor = "#fad487";
+                    old = element;
+                    id = element.getAttribute("id");
+                    window.parent.postMessage(id, url); // láº¥y giÃ¡ trá»‹ cá»§a thuá»™c tÃ­nh id;
+                }
+                else {
+                    window.parent.postMessage("scroll up", url);
+                }
+            }
+        }
+        document.addEventListener('click', function (evt) {
+            changebackground(evt.target);
+        }, false);
+
+    </script>
+</body>

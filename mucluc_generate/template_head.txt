@@ -1,0 +1,44 @@
+<head>
+    <meta charset="UTF-8">
+    <!--<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Serif+Pro"> <!--Times+New+Roman Times New Roman-->
+    <style>
+        body {
+            font-size: 16px;
+            font-family: "K2D";
+
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0px;
+            margin-left: -3px;
+            margin-bottom: 0px;
+
+        }
+
+        li.h1 {
+            padding-left: 0px;
+            margin-bottom: 5px;
+        }
+
+        li.h2 {
+            padding-left: 14px;
+            margin-top: -15px;
+        }
+
+        li.h3 {
+            padding-left: 18px;
+            margin-top: -15px;
+        }
+
+        li.h4 {
+            padding-left: 22px;
+            margin-top: -15px;
+        }
+
+        p:hover {
+            background-color: #ffefd1;
+        }
+    </style>
+</head>
+

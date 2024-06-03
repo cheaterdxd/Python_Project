@@ -1,0 +1,10 @@
+severity
+object
+object_type
+organization_group
+release_level
+message
+message_en
+description
+description_en
+customer_group

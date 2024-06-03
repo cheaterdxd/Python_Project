@@ -1,0 +1,9 @@
+rule "Filter_Windows_APT_Suspicious_File_Scripts_Ini_Creation_In_SYSVOL_Powershell_Ver1"
+    lock-on-active
+    salience 1
+    when
+            $event : Event((source_log in ("win_event_log")) && (log_provider_name == "AdvanceCollector") && (signature_id == "4104"), script_content != null, $script_content : script_content.replaceAll("(\"|\'|`)","").toLowerCase(), ($script_content contains "\\sysvol\\") && ($script_content contains "\\sysvol\\") && ($script_content contains "scripts.ini"))
+    then
+        modify ($event) {addFilteredId("Filter_Windows_APT_Suspicious_File_Scripts_Ini_Creation_In_SYSVOL_Powershell_Ver1")};
+
+    end

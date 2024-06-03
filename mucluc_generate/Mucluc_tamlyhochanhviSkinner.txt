@@ -1,0 +1,16 @@
+id:1
+1. Đặt vấn đề
+2. Giới thiệu tâm lý học hành vi của Skinner
+2.1. Tiểu sử
+2.2. Học thuyết của B.F Skinner
+2.3. Nguyên tắc củng cố
+2.4. Tạo nếp
+id:2
+2.5. Những kích thích khó chịu
+2.6. Kết luận
+2.7. Sơ đồ
+3. Một số vấn đề khác và thuyết hành vi của Skinner
+3.1. Nguồn gốc của hành vi có điều kiện (operant behavior)
+3.2. Điều khiển hành vi có điều kiện (control of operant behavior)
+.TÀI LIỆU THAM KHẢO
+.DANH MỤC HÌNH

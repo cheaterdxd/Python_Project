@@ -1,0 +1,10 @@
+colorama
+tqdm
+pyyaml
+seatable-api
+scapy
+openpyxl
+pandas
+yaml
+json
+requests

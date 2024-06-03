@@ -1,0 +1,13 @@
+{
+    "EDR" : {
+        "username" : "",
+        "password" : "123qweA@",
+        "server" : ""
+    },
+    "SIEM" : {
+        "username" : "",
+        "password" : "",
+        "server" : "https://siem.staging.vcs.vn"
+    },
+    "correlation" : "C:\\Users\\hieunc\\code\\awesome-tool-content\\Correlation\\correlation.jar"
+}
