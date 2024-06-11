@@ -1,12 +1,14 @@
-from typing import Optional
-
+import dotenv, os
 import discord
 from discord import app_commands
 import colorama, asyncio
 import yaml
 import traceback
 
+dotenv.load_dotenv()
+TOKEN = os.getenv("TOKEN")
 DEBUG = False
+
 if DEBUG:
     MY_GUILD = discord.Object(id=902626872725217301)  # test guild
 else:
@@ -200,4 +202,4 @@ async def report_message(interaction: discord.Interaction, message: discord.Mess
     await log_channel.send(embed=embed, view=url_view)
 '''
 
-# client.run('')
+client.run(TOKEN)
