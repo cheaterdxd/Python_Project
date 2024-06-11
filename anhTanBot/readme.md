@@ -1,27 +1,21 @@
 # Chức năng chính
 
-Số lượng hiện tại: 2
+Số lượng hiện tại: 4
 
 ## Điểm danh
 
+### Cấu hình file điểm danh
+
+- file danhsachlop.xlsx được mặc định là file điểm danh
+- trong đó sheet 1 dùng để quản lý
+
 ### Sử dụng
 ```
-/diem-danh
+/diem_danh
 ```
 
 ### Input
-1. File txt với tên là tên của kênh cần điểm danh. File này phải đặt cùng thư mục với ứng dụng
-2. Bên trong file chứa danh sách học viên, mỗi dòng 1 người, tên học viên là tên hiển thị trên discord của họ
-vd: 
-- Điểm danh ở kênh: sieu-ly-mau-giao
--> file: sieu-ly-mau-giao.txt
--> trong file: 
-```
-cheaterdxd
-Tân
-Tod
-```
-- Nếu tên kênh là tiếng việt thì đặt tiếng việt, siêu-lý-mẫu-giáo.txt
+Chỉ cần gõ lệnh ở kênh muốn điểm danh
 
 ### Output
 1. Chương trình sẽ điểm danh 5p/ lần. in ra danh sách học viên vắng và có mặt
@@ -44,6 +38,25 @@ Chưa có mặt: <br>
 
 Câu lệnh được dùng để dừng điểm danh
 ```
-/dung-diem-danh
+/dung_diem_danh
 ```
+
+# Gán role cho mọi user trong Voice chat
+
+Câu lệnh được dùng để gán Role cho mọi user đang tham gia kênh Voice Chat (CHỈ VOICE CHAT)
+
+```
+role_set_all [tên role muốn gán]
+```
+
+# Gán role cho một số user
+
+Câu lệnh được dùng để gán Role cho một hoặc một số user (KHÔNG HẠN CHẾ CÓ ON/OFF, tham gia hay không tham gia chat voice)
+
+```
+role_set_for [tên user muốn gán] [tên role muốn gán]
+
++ tên user muốn gán: có thể là 1 list các user, phân biệt nhau bằng dấu "," ví dụ: tuấn,tân,tod
+```
+
 
