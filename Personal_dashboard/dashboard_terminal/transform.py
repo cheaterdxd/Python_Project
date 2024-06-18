@@ -1,26 +1,34 @@
 from tkinter import *
-import os
-
+from tkinter import messagebox
 import yaml
-
-
 choose_target = False
+options_file_path = "options.yaml"
 
-class MyApp:
-    def __init__(self, master):
-        self.master = master
-        master.title("My Dashboard")
+class Page(Frame):
+    def __init__(self, parent, controller):
+        Frame.__init__(self, parent)
+        self.controller = controller
+
+class HelloPage(Page):
+    # def __init__(self, parent, controller):
+    #     Page.__init__(self, parent, controller)
+    #     label = Label(self, text="Dashboard", font=('Helvetica', 18, 'bold'))
+    #     label.pack(pady=20)
+    #     start_button = Button(self, text="Start", command=lambda: controller.show_frame("InputPage"))
+    #     start_button.pack(pady=20)
+    def __init__(self, parent, controller):
+        Page.__init__(self, parent, controller)
 
         # Initialize variables
         self.seconds = 0
         self.running = False
 
         # Create timer label
-        self.timer_label = Label(master, text="00:00:00", font=("Arial", 50))
+        self.timer_label = Label(self, text="00:00:00", font=("Arial", 50))
         self.timer_label.pack()
 
         # Create button frame
-        self.button_frame = Frame(master)
+        self.button_frame = Frame(self)
         self.button_frame.pack()
 
         # Create start button
@@ -36,7 +44,7 @@ class MyApp:
         self.reset_button.pack(side=LEFT)
 
         # Frame for options list
-        self.options_frame = Frame(master, pady=15)
+        self.options_frame = Frame(self, pady=15)
         self.options_frame.pack(fill=Y, expand=True)
 
         # Scrollbar for options list
@@ -49,18 +57,20 @@ class MyApp:
         self.scrollbar.config(command=self.options_list.yview)
 
         # Button frame
-        self.button_frame = Frame(master)
-        # self.button_frame.pack()
+        self.button_frame = Frame(self)
+        self.button_frame.pack()
 
         # Button to choose the selected option
         self.choose_button = Button(self.button_frame, text="Choose", command=self.choose_option)
         self.choose_button.grid(row=0, column=0, padx=10, pady=10)
-        # self.choose_button.pack(side=LEFT)
 
         # Button to add new option
-        self.add_option_button = Button(self.button_frame, text="Add new", command=self.add_option)
+        self.add_option_button = Button(self.button_frame, text="Add new", command=lambda: controller.show_frame("InputPage"))
         self.add_option_button.grid(row=0, column=1, padx=10, pady=10) 
-        # self.add_option_button.pack(side=LEFT)
+
+        # Button to reload new option
+        self.add_option_button = Button(self.button_frame, text="Reload new", command=self.load_options)
+        self.add_option_button.grid(row=0, column=2, padx=10, pady=10) 
         
         # Label to display the chosen option
         self.chosen_label = Label(self.options_frame, text="Chosen Option:", foreground='red')
@@ -69,8 +79,9 @@ class MyApp:
         self.chosen_label.config(textvariable=self.chosen_text)  # Bind label to variable
         
         # Load options from file on app launch
-        self.filename = "options.yaml"  # Replace with your file name
+        # self.filename = "options.yaml"  # Replace with your file name
         self.load_options()
+        print("load me")
         
     def start_timer(self):
         if choose_target == False:
@@ -103,12 +114,13 @@ class MyApp:
     def update_timer(self):
         if self.running:
             self.seconds += 1
-            self.master.after(1000, self.update_timer)  # Update every 1 second
+            self.self.after(1000, self.update_timer)  # Update every 1 second
         self.set_timer()
         
     def load_options(self):
+        self.options_list.delete(0, END) # clean for sure
         try:
-            with open(self.filename, "r") as f:
+            with open(options_file_path, "r") as f:
                 data = yaml.safe_load(f)
             options = list(data.keys())  # Extract option names as keys
             print(options)
@@ -126,14 +138,75 @@ class MyApp:
         if selected_index:
             chosen_option = self.options_list.get(selected_index[0])
             self.chosen_text.set(f"You chose: {chosen_option}")  # Update label variable
-            choose_target = True
         else:
             self.chosen_text.set("Please select an option.")  # Set label for missing selection
 
-    def add_option(self):
-        pass
-            
-# Create main window and run app
-root = Tk()
-app = MyApp(root)
-root.mainloop()
+class InputPage(Page):
+    def __init__(self, parent, controller):
+        Page.__init__(self, parent, controller)
+        
+        self.create_widgets()
+    
+    def create_widgets(self):
+        Label(self, text="Nhập tên công việc:").grid(row=0, column=0)
+        self.ten_cong_viec_entry = Entry(self)
+        self.ten_cong_viec_entry.grid(row=0, column=1)
+        # self.ten_cong_viec_entry.pack()
+        
+        fields = [
+            "trung_binh_time", "lan_cuoi", "dat_lich_nhac", 
+            "ngay_bat_dau", "ngay_ket_thuc", "lap_lai_count", 
+            "muc_do_nghiem_trong", "diem_danh_gia"
+        ]
+
+        self.entries = {}
+        for i, field in enumerate(fields):
+            Label(self, text=field).grid(row=i+1, column=0)
+            entry = Entry(self)
+            entry.grid(row=i+1, column=1)
+            self.entries[field] = entry
+
+        self.is_lap_lai_var = BooleanVar()
+        Label(self, text="is_lap_lai").grid(row=len(fields)+1, column=0)
+        Checkbutton(self, variable=self.is_lap_lai_var).grid(row=len(fields)+1, column=1)
+        
+        save_button = Button(self, text="Save to YAML", command=self.save_to_yaml)
+        save_button.grid(row=len(fields)+2, columnspan=2)
+        
+        back_button = Button(self, text="Back", command=lambda: self.controller.show_frame("HelloPage"))
+        back_button.grid(row=len(fields)+3, columnspan=2)
+
+    def save_to_yaml(self):
+        option_name:str= self.ten_cong_viec_entry.get()
+        data = {option_name: {field: entry.get() for field, entry in self.entries.items()}}
+        data[option_name]['is_lap_lai'] = self.is_lap_lai_var.get()
+        
+        with open(options_file_path, 'a') as file:
+            yaml.dump(data, file)
+        
+        messagebox.showinfo("Success", "Data saved to output.yaml")
+
+class App(Tk):
+    def __init__(self):
+        Tk.__init__(self)
+        self.title("Dashboard yourself")
+
+        container = Frame(self)
+        container.pack(side="top", fill="both", expand=True)
+        
+        self.frames = {}
+        for F in (HelloPage, InputPage):
+            page_name = F.__name__
+            frame = F(parent=container, controller=self)
+            self.frames[page_name] = frame
+            frame.grid(row=0, column=0, sticky="nsew")
+        
+        self.show_frame("HelloPage")
+
+    def show_frame(self, page_name):
+        frame = self.frames[page_name]
+        frame.tkraise()
+
+if __name__ == "__main__":
+    app = App()
+    app.mainloop()

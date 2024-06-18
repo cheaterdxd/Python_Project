@@ -5,6 +5,9 @@ option1:
   ngay_bat_dau:
   ngay_ket_thuc:
   is_lap_lai:
+  lap_lai_count:
+  muc_do_nghiem_trong:
+  diem_danh_gia:
 option2:
   trung_binh_time:
   lan_cuoi:
@@ -12,6 +15,9 @@ option2:
   ngay_bat_dau:
   ngay_ket_thuc:
   is_lap_lai:
+  lap_lai_count:
+  muc_do_nghiem_trong:
+  diem_danh_gia:
 option3:
   trung_binh_time:
   lan_cuoi:
@@ -19,6 +25,9 @@ option3:
   ngay_bat_dau:
   ngay_ket_thuc:
   is_lap_lai:
+  lap_lai_count:
+  muc_do_nghiem_trong:
+  diem_danh_gia:
 option4:
   trung_binh_time:
   lan_cuoi:
@@ -26,6 +35,9 @@ option4:
   ngay_bat_dau:
   ngay_ket_thuc:
   is_lap_lai:
+  lap_lai_count:
+  muc_do_nghiem_trong:
+  diem_danh_gia:
 option5:
   trung_binh_time:
   lan_cuoi:
@@ -33,3 +45,36 @@ option5:
   ngay_bat_dau:
   ngay_ket_thuc:
   is_lap_lai:
+  lap_lai_count:
+  muc_do_nghiem_trong:
+  diem_danh_gia:
+option1:
+  dat_lich_nhac: '2'
+  diem_danh_gia: '2'
+  is_lap_lai: true
+  lan_cuoi: '2'
+  lap_lai_count: '2'
+  muc_do_nghiem_trong: '2'
+  ngay_bat_dau: '2'
+  ngay_ket_thuc: '2'
+  trung_binh_time: '2'
+test1:
+  dat_lich_nhac: '2'
+  diem_danh_gia: '2'
+  is_lap_lai: true
+  lan_cuoi: '2'
+  lap_lai_count: '2'
+  muc_do_nghiem_trong: '2'
+  ngay_bat_dau: '2'
+  ngay_ket_thuc: '2'
+  trung_binh_time: '2'
+test2:
+  dat_lich_nhac: '4'
+  diem_danh_gia: '4'
+  is_lap_lai: true
+  lan_cuoi: '4'
+  lap_lai_count: '4'
+  muc_do_nghiem_trong: '4'
+  ngay_bat_dau: '4'
+  ngay_ket_thuc: '4'
+  trung_binh_time: '4'
