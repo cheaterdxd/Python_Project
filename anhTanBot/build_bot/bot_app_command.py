@@ -185,7 +185,18 @@ async def role_set_for(interaction: discord.Interaction, user_name_list:str, rol
                 await interaction.followup.send(f"'{user_name}' đã tồn tại role này rồi",ephemeral=True)
     else:
         await interaction.response.send_message(f"Role '{role_name}' not found", ephemeral=True)
-    
+
+
+@client.tree.command(description="Liệt kê ra các user hiện tại đang trong kênh")
+async def get_user(interaction: discord.Interaction):
+    '''Lấy danh sách users đang trong kênh'''
+    members = interaction.channel.members
+    output = ""
+    for i in members: 
+        output += i.display_name + "\n"
+    await interaction.response.send_message(f"{output}", ephemeral=True)
+
+
 
 '''
 def load_file_user(class_name: str) -> list:

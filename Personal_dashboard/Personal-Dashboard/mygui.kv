@@ -1,0 +1,35 @@
+<MyGrid>:
+    id: cut_info_box
+    TextInput:
+    TextInput:
+    TextInput:
+    Button:
+        text: "-"
+BoxLayout:
+    orientation: 'vertical'
+    GridLayout:
+        cols: 2
+        Label:
+            id: label_widget
+            text: 'Cắt video tools'
+        Button:
+            text: 'Load your video'
+            # on_press: root.add_widget(label_widget)
+    VideoPlayer:
+    GridLayout:
+        cols: 4
+        rows: 2
+        Label:
+            text: "Tên đoạn cut"
+        Label:
+            text: "Bắt đầu cắt"
+        Label:
+            text: "Kết thúc cắt"
+        Button:
+            text: "+"
+            on_press: root.add_widget(MyGrid)
+        BoxLayout:
+
+    Button:
+        text: 'Remove Button'
+        on_press: root.remove_widget(label_widget)
