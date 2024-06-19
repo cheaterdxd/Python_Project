@@ -4,6 +4,57 @@ import yaml
 choose_target = False
 options_file_path = "options.yaml"
 
+
+def time_string_to_seconds(time_string:str):
+    """Converts a time string in HH:MM:SS format to total seconds.
+
+    Args:
+        time_string: The time string (e.g., "00:00:09").
+
+    Returns:
+        The total number of seconds represented by the time string.
+
+    Raises:
+        ValueError: If the time string is not in the correct format (HH:MM:SS).
+    """
+    try:
+        hours, minutes, seconds = map(int, time_string.split(":"))
+        total_seconds = hours * 3600 + minutes * 60 + seconds
+        return total_seconds
+    except ValueError:
+        raise ValueError(f"Invalid time string format: {time_string}")
+
+def update_record_data(option, field, data) -> int:
+    """Update date for record in a job
+
+    Args:
+        option (_type_): job name
+        field (_type_): field to update
+        data (_type_): data new to add
+
+    Returns:
+        int: -1 if fails; 1 if success
+    """
+    data_old = None
+    try:
+        with open(options_file_path, 'r') as yaml_read_io:
+            data_old = yaml.safe_load(yaml_read_io)
+            option_data:dict = data_old.get(option)
+            print(option_data)
+            field_data:list = option_data.get(field)
+            if field_data == None:
+                data_old[option][field] = [data]
+            else:
+                print(field_data)
+                field_data.append(data)
+        with open(options_file_path, "w") as yaml_write_io:
+            yaml.dump(data_old, yaml_write_io)
+        return 1
+    except Exception as exp:
+        print(exp)
+        return -1
+        
+
 class Page(Frame):
     def __init__(self, parent, controller):
         Frame.__init__(self, parent)
@@ -42,6 +93,10 @@ class HelloPage(Page):
         # Create reset button
         self.reset_button = Button(self.button_frame, text="Reset", command=self.reset_timer)
         self.reset_button.pack(side=LEFT)
+        
+        # Create reset button
+        self.write_button = Button(self.button_frame, text="Write", command=self.write_result)
+        self.write_button.pack(side=LEFT)
 
         # Frame for options list
         self.options_frame = Frame(self, pady=15)
@@ -105,6 +160,8 @@ class HelloPage(Page):
         self.update_timer()
         self.start_button.config(text="Start")
         self.start_button.config(state="active")
+        global choose_target
+        choose_target = False
         
         
     def set_timer(self):
@@ -114,7 +171,7 @@ class HelloPage(Page):
     def update_timer(self):
         if self.running:
             self.seconds += 1
-            self.self.after(1000, self.update_timer)  # Update every 1 second
+            self.after(1000, self.update_timer)  # Update every 1 second
         self.set_timer()
         
     def load_options(self):
@@ -135,12 +192,25 @@ class HelloPage(Page):
 
     def choose_option(self):
         selected_index = self.options_list.curselection()
+        global choose_target
         if selected_index:
-            chosen_option = self.options_list.get(selected_index[0])
-            self.chosen_text.set(f"You chose: {chosen_option}")  # Update label variable
+            self.chosen_option = self.options_list.get(selected_index[0])
+            self.chosen_text.set(f"You chose: {self.chosen_option}")  # Update label variable
+            choose_target = True
         else:
             self.chosen_text.set("Please select an option.")  # Set label for missing selection
-
+    
+    
+    def write_result(self):
+        record_timer = self.timer_label.cget('text')
+        total_seconds = time_string_to_seconds(record_timer)
+        if update_record_data(self.chosen_option,'lap_lai_count',total_seconds) == 1:
+            messagebox.showinfo("Success", "Data saved to file")
+            self.write_button.config(state="disabled")
+        else:
+            messagebox.showinfo("Failed", "Data cannot saved to file")
+        print(record_timer)
+    
 class InputPage(Page):
     def __init__(self, parent, controller):
         Page.__init__(self, parent, controller)
@@ -185,6 +255,13 @@ class InputPage(Page):
             yaml.dump(data, file)
         
         messagebox.showinfo("Success", "Data saved to output.yaml")
+
+class ViewJobs(Page):
+    def __init__(self, parent, controller):
+        Page.__init__(self, parent, controller)
+        label = Label(self, text="Danh sách công việc", font=('K2D', 18, 'bold'))
+        label.pack(pady=20)
+        
 
 class App(Tk):
     def __init__(self):

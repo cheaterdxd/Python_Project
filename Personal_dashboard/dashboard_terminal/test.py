@@ -1,73 +1,121 @@
-import tkinter as tk
-from tkinter import messagebox
-import yaml
+from tkinter import *
+from  tkinter import ttk
 
-# Function to save data to a YAML file
-def save_to_yaml():
-    data = {
-        'option1': {
-            'trung_binh_time': trung_binh_time_entry.get(),
-            'lan_cuoi': lan_cuoi_entry.get(),
-            'dat_lich_nhac': dat_lich_nhac_entry.get(),
-            'ngay_bat_dau': ngay_bat_dau_entry.get(),
-            'ngay_ket_thuc': ngay_ket_thuc_entry.get(),
-            'is_lap_lai': is_lap_lai_var.get(),
-            'lap_lai_count': lap_lai_count_entry.get(),
-            'muc_do_nghiem_trong': muc_do_nghiem_trong_entry.get(),
-            'diem_danh_gia': diem_danh_gia_entry.get()
-        }
-    }
 
-    with open('output.yaml', 'w') as file:
-        yaml.dump(data, file)
+ws  = Tk()
+ws.title('PythonGuides')
+ws.geometry('500x500')
+ws['bg'] = '#AC99F2'
+
+game_frame = Frame(ws)
+game_frame.pack()
+
+#scrollbar
+game_scroll = Scrollbar(game_frame)
+game_scroll.pack(side=RIGHT, fill=Y)
+
+game_scroll = Scrollbar(game_frame,orient='horizontal')
+game_scroll.pack(side= BOTTOM,fill=X)
+
+my_game = ttk.Treeview(game_frame,yscrollcommand=game_scroll.set, xscrollcommand =game_scroll.set)
+
+
+my_game.pack()
+
+game_scroll.config(command=my_game.yview)
+game_scroll.config(command=my_game.xview)
+
+#define our column
+ 
+my_game['columns'] = ('player_Name', 'player_Country', 'player_Medal')
+
+# format our column
+my_game.column("#0", width=0,  stretch=NO)
+my_game.column("player_Name",anchor=CENTER, width=80)
+my_game.column("player_Country",anchor=CENTER,width=80)
+my_game.column("player_Medal",anchor=CENTER,width=80)
+
+
+#Create Headings 
+my_game.heading("#0",text="",anchor=CENTER)
+my_game.heading("player_Name",text="Id",anchor=CENTER)
+my_game.heading("player_Country",text="Name",anchor=CENTER)
+my_game.heading("player_Medal",text="Rank",anchor=CENTER)
+
+
+#add data 
+my_game.insert(parent='',index='end',iid=0,text='',
+values=('Tom','US','Gold'))
+my_game.insert(parent='',index='end',iid=1,text='',
+values=('Aandrew','Australia','NA'))
+my_game.insert(parent='',index='end',iid=2,text='',
+values=('Anglina','Argentina','Silver'))
+my_game.insert(parent='',index='end',iid=3,text='',
+values=('Shang-Chi','China','Bronze'))
+
+
+my_game.pack()
+
+frame = Frame(ws)
+frame.pack(pady=20)
+
+#labels
+playerid= Label(frame,text = "player_id")
+playerid.grid(row=0,column=0 )
+
+playername = Label(frame,text="player_name")
+playername.grid(row=0,column=1)
+
+playerrank = Label(frame,text="Player_rank")
+playerrank.grid(row=0,column=2)
+
+#Entry boxes
+playerid_entry= Entry(frame)
+playerid_entry.grid(row= 1, column=0)
+
+playername_entry = Entry(frame)
+playername_entry.grid(row=1,column=1)
+
+playerrank_entry = Entry(frame)
+playerrank_entry.grid(row=1,column=2)
+
+#Select Record
+def select_record():
+    #clear entry boxes
+    playerid_entry.delete(0,END)
+    playername_entry.delete(0,END)
+    playerrank_entry.delete(0,END)
     
-    messagebox.showinfo("Success", "Data saved to output.yaml")
+    #grab record
+    selected=my_game.focus()
+    #grab record values
+    values = my_game.item(selected,'values')
+    #temp_label.config(text=selected)
 
-# Create the main window
-root = tk.Tk()
-root.title("YAML Input Form")
+    #output to entry boxes
+    playerid_entry.insert(0,values[0])
+    playername_entry.insert(0,values[1])
+    playerrank_entry.insert(0,values[2])
 
-# Create labels and entries for each field
-tk.Label(root, text="trung_binh_time").grid(row=0, column=0)
-trung_binh_time_entry = tk.Entry(root)
-trung_binh_time_entry.grid(row=0, column=1)
+#save Record
+def update_record():
+    selected=my_game.focus()
+    #save new data 
+    my_game.item(selected,text="",values=(playerid_entry.get(),playername_entry.get(),playerrank_entry.get()))
+    
+   #clear entry boxes
+    playerid_entry.delete(0,END)
+    playername_entry.delete(0,END)
+    playerrank_entry.delete(0,END)
 
-tk.Label(root, text="lan_cuoi").grid(row=1, column=0)
-lan_cuoi_entry = tk.Entry(root)
-lan_cuoi_entry.grid(row=1, column=1)
+#Buttons
+select_button = Button(ws,text="Select Record", command=select_record)
+select_button.pack(pady =10)
 
-tk.Label(root, text="dat_lich_nhac").grid(row=2, column=0)
-dat_lich_nhac_entry = tk.Entry(root)
-dat_lich_nhac_entry.grid(row=2, column=1)
+edit_button = Button(ws,text="Edit ",command=update_record)
+edit_button.pack(pady = 10)
 
-tk.Label(root, text="ngay_bat_dau").grid(row=3, column=0)
-ngay_bat_dau_entry = tk.Entry(root)
-ngay_bat_dau_entry.grid(row=3, column=1)
+temp_label =Label(ws,text="")
+temp_label.pack()
 
-tk.Label(root, text="ngay_ket_thuc").grid(row=4, column=0)
-ngay_ket_thuc_entry = tk.Entry(root)
-ngay_ket_thuc_entry.grid(row=4, column=1)
-
-tk.Label(root, text="is_lap_lai").grid(row=5, column=0)
-is_lap_lai_var = tk.BooleanVar()
-is_lap_lai_checkbox = tk.Checkbutton(root, variable=is_lap_lai_var)
-is_lap_lai_checkbox.grid(row=5, column=1)
-
-tk.Label(root, text="lap_lai_count").grid(row=6, column=0)
-lap_lai_count_entry = tk.Entry(root)
-lap_lai_count_entry.grid(row=6, column=1)
-
-tk.Label(root, text="muc_do_nghiem_trong").grid(row=7, column=0)
-muc_do_nghiem_trong_entry = tk.Entry(root)
-muc_do_nghiem_trong_entry.grid(row=7, column=1)
-
-tk.Label(root, text="diem_danh_gia").grid(row=8, column=0)
-diem_danh_gia_entry = tk.Entry(root)
-diem_danh_gia_entry.grid(row=8, column=1)
-
-# Create a button to save the data
-save_button = tk.Button(root, text="Save to YAML", command=save_to_yaml)
-save_button.grid(row=9, columnspan=2)
-
-# Start the Tkinter event loop
-root.mainloop()
+ws.mainloop()
