@@ -1,0 +1,59 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Counting Timer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        #timer {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Counting Timer</h1>
+    <div id="timer">0:00</div>
+    <button onclick="startTimer()">Start</button>
+    <button onclick="stopTimer()">Stop</button>
+    <button onclick="resetTimer()">Reset</button>
+    <button class="btn"><i class="fa fa-home"></i></button>
+    <button class=" btn fa fa-hourglass-start" aria-hidden="true"></button>
+
+    <script>
+        var timerInterval;
+        var seconds = 0;
+
+        function startTimer() {
+            if(!timerInterval){
+                timerInterval = setInterval(updateTimer, 1000);
+            }
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            seconds = 0;
+            updateTimer();
+        }
+
+        function updateTimer() {
+            var minutes = Math.floor(seconds / 60);
+            var remainderSeconds = seconds % 60;
+            document.getElementById('timer').textContent = minutes + ':' + (remainderSeconds < 10 ? '0' : '') + remainderSeconds;
+            seconds++;
+        }
+    </script>
+</body>
+</html>
