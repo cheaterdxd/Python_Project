@@ -1,2 +1,0 @@
-#!/bin/bash
-python3 "$HOME/awesome-tool-content/content_work_with/AutomationTest/auto_test.py" $*
